@@ -92,17 +92,21 @@ We have provided almost all of the code you need, other than the linked list
 methods themselves. We have also provided `depthFirstSolve` in `solver.c`.
 We have modified `solver.c` such that when you find a solution to the maze, rather
 than returning that solution we just add the solution to the list and keep
-going. As the base case of reaching end is satisfied in th the recursive funtion `addNode` is called which adds the currect path to the linked list.
+going. As the base case of reaching end is satisfied in the recursive funtion, `addNode` is called which adds the currect path to the linked list.
 successPaths points to an object of type PathLL which always holds head of the linked list.
 
-We have provided you with a few test mazes, in the `inputs` directory and also respective output in `expected` directory.  You should also write more of your own.
+We have provided you with a few test mazes, in the `inputs` directory and also respective output in `expected` directory.  You should also write more testcases of your own.
 You should run pa07 with two arguments :
 
 >>./pa07 mazeFile pathFile
 
-`pathFile` is the output file in which you will write all your paths. printPaths is used in pa07.c to write all the paths in the linked list to the output file.
-## What you need to submit
+`pathFile` is the output file in which you will write all your paths. printPaths is used in pa07.c to write all the paths from the linked list to the output file.
 
 You can use `diff` command to compare your output file with the expected file for every maze.
+
+You should also test `removeNode`, `freeNode`, `freePaths` and `containsNode` functions on your own.
+
+
+## What you need to submit
 
 1. Submit your version of `list.c` that contains *working implementations of all the functions*. 
