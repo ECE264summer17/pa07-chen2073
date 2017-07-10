@@ -95,6 +95,10 @@ than returning that solution we just add the solution to the list and keep
 going. As the base case of reaching end is satisfied in the recursive funtion, `addNode` is called which adds the currect path to the linked list.
 successPaths points to an object of type PathLL which always holds head of the linked list.
 
+You should compile all the files using following command :
+
+>> gcc -g -std=c99 -Wall -Werror -Wshadow -Wvla -Wunreachable-code maze.c list.c solver.c mazehelper.c pa07.c -o pa07
+
 We have provided you with a few test mazes, in the `inputs` directory and also respective output in `expected` directory.  You should also write more testcases of your own.
 You should run pa07 with two arguments :
 
@@ -110,3 +114,6 @@ You should also test `removeNode`, `freeNode`, `freePaths` and `containsNode` fu
 ## What you need to submit
 
 1. Submit your version of `list.c` that contains *working implementations of all the functions*. 
+
+Make sure you do not have any valgrind errors.
+40% points will be deducted for any valgrind error.
