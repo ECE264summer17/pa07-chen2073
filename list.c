@@ -6,27 +6,39 @@
 
 /** INTERFACE FUNCTIONS **/
 
-PathLL * buildPaths() {						//?
+PathLL * buildPaths() {
 	PathLL * retval = malloc(sizeof(PathLL));
 	retval->head = NULL;
 	return retval;
 }
 
-void freePaths(PathLL * p) {
-	free(p);
-}
+void freePaths(PathLL * p){
+	if (p == NULL)
+		return;
 
-PathNode * buildNode(char * path) {				//insert value to a new node and return address
+	PathNode * next = NULL;
+	PathNode * cur = p->head;
+
+	while (cur != NULL)
+	{
+		next = cur->next;
+		freeNode(cur);
+		cur = next;
+	}
+
+	free(p);}
+
+PathNode * buildNode(char * path) {				
 	PathNode * node = malloc(sizeof(PathNode));
-		
-	node->path = malloc(sizeof(char) * (strlen(path) + 1));	
-	strcpy((node->path), path);				
-	node->next = NULL;					
-	
+	node->next = NULL;
+
 	//WARNING: don't forget to use strcpy to copy path into the
 	//new node. Don't just set them equal, otherwise if the input path changes
 	//the node will have the wrong path.
-return node;}
+	node->path = malloc(sizeof(char) * (strlen(path) + 1));
+	strcpy((node->path), path);				
+	
+	return node;}
 
 void freeNode(PathNode * p){
 	free(p->path);
@@ -34,97 +46,126 @@ void freeNode(PathNode * p){
 
 bool addNode(PathLL * paths, char * path) {
 
-	if((paths->head) == NULL){		//empty head
-		paths->head = buildNode(path);}
+	if (paths->head == NULL){
+		
+		paths->head = buildNode(path);		// empty head
+		return true;}
 
-	PathNode * prev = paths->head;			//prev = head
-	PathNode * curr = paths->head->next;		//curr = first node
+	if (containsNode(paths, path)){			//repeated path
+		return false;}
 
-	while(curr != NULL){
+	PathNode * new = buildNode(path);
+	PathNode * prev = NULL;
+	PathNode * curr = paths->head;
 
-		if( strlen(curr->path) == strlen(path) )	//same length
-		{		
-			if( checkturns(curr->path) == checkturns(path) )		//same turns
-			{
-				int i = 0;
-				for(i=0; i <= strlen(path); i++)		//compare each letter alpabetically
-				{
-				  if( (curr->path)[i] > path[i] ){			//new path is higher than current path alphabetically
-				  PathNode * newNode = buildNode(path);			//initialize new path a new node
-				  newNode->next = curr;					//add new path before current path
-				  prev->next = newNode;
-				  return true;}
+	while (curr != NULL)
+	{
+		bool insertHere = false;	//insert indicator
+
+		if (strlen(curr->path) > strlen(path)){		// shoter path go first
+			
+			insertHere = true;
+		}
+		else if (strlen(curr->path) == strlen(path))	//same length
+		{		    
+			if (checkturns(curr->path) > checkturns(path)){		//less-turn path is prior
+			insertHere = true;}
+
+			else if (checkturns(curr->path) == checkturns(path) && strcmp(curr->path, path) > 0){	//same turns
+				
+				for(int i=0; i < strlen(curr->path); i++){	//compare alphabettically
+					
+					if( curr->path[i] > path[i]){
+					insertHere = true;}
 				}
 			}
-			
-			
-			if( checkturns(curr->path) > checkturns(path) ){	//new path has fewer turns than current path's
-			PathNode * newNode = buildNode(path);			
-			newNode->next = curr;					//add new path before current
-			prev->next = newNode;
-			return true;}
+		}
+
+		if (insertHere){	
+			if (curr == paths->head){	//insert head
 				
-		}
-		
-		if( strlen(curr->path) > strlen(path) )		//new path has shorter steps than current's
-		{			
-		  PathNode * newNode = buildNode(path);			
-		  newNode->next = curr;						//add it before current
-		  prev->next = newNode;
-		  return true;
-		}
-			
-		
+				new->next = curr;
+				paths->head = new;
+			}
+			else{		//insert in middle
+				
+				prev->next = new;
+				new->next = curr;
+			}
 
-	prev = prev->next;
-	curr = curr->next;}
+		return true;}
 
-	return false;}
-
-bool removeNode(PathLL * paths, char * path) {
-	
-	if(containsNode(paths, path) == true)
-	{
-		PathNode * prev = paths->head;		//prev = head
-		PathNode * curr = paths->head->next;		//curr = first node
-
-		while(curr != NULL){
-
-			if( strcmp(curr->path, path) == 0 ){
-				prev->next = curr->next;
-				freeNode(curr);
-				return true;}
-		
-		prev = prev->next;
+		prev = curr;
 		curr = curr->next;}
-	}
 
+	prev->next = new;	// list reaches end, insert at tail
+	return true;}
+
+bool removeNode(PathLL * paths, char * path) 
+{
+	PathNode * prev = NULL;
+	PathNode * curr = paths->head;
+
+	while (curr != NULL)
+	{
+		if (strcmp(curr->path, path) == 0)
+		{
+			
+			if (curr == paths->head){	// locate node
+				
+				paths->head = paths->head;	// delete head
+			}
+			else{
+				
+				prev->next = curr->next;	// deleting middle or on tail
+			}
+
+			freeNode(curr);
+		return true;}
+
+		prev = curr;
+		curr = curr->next;
+	}
+	
 return false;}
 
-bool containsNode(PathLL * paths, char * path) {			//seach list
-	
+bool containsNode(PathLL * paths, char * path) 
+{	
 	PathNode * curr = paths->head; 
-	while( curr != NULL){
-		
+	
+	while(curr != NULL){
 		if( strcmp(curr->path, path) == 0 ){
 			return true;}
 
-		curr = curr->next;}
-
+		curr = curr->next;
+	}
+	
+	
 return false;}
 
-void printPaths(PathLL * paths, FILE * fptr) {
+void printPaths(PathLL * paths, FILE * fptr) 
+{
 	PathNode * curr = paths->head;
 	int i = 0;
-	while (curr != NULL) {
+	
+	while (curr != NULL) 
+	{
 		fprintf(fptr, "Path %2d: %s\n", i, curr->path);
 		i++;
-		curr = curr->next;}
+		curr = curr->next;
+	}
 }
 
-int checkturns(char * path){
+int checkturns(char * path)
+{
 	int i, count = 0;
-	for(i=1; i < strlen(path); i++){
-	if(path[i-1] != path[i]){
-	count++;}}
+
+	for(i=1; i < (signed)strlen(path); i++)
+	{
+		if(path[i-1] != path[i])
+		{
+			count++;
+		}
+	}
+
 return count;}
