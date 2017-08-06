@@ -1,0 +1,27 @@
+
+
+
+
+
+TEST CASE: 1 (Add Node): 
+Tests for maze1
+PASS
+Tests for maze2
+PASS
+Tests for maze3
+PASS
+TEST CASE: 2 (Remove Node): 
+PASS
+TEST CASE: 3 (Contains Node): 
+PASS
+TEST CASE: 4 (Free Paths/Node): 
+PASS
+TEST CASE: 5 (Build Paths/Node): 
+PASS
+TEST CASE: valgrind
+memcheck.log.maze1_0
+memcheck.log.maze2_0
+memcheck.log.maze3_0
+memcheck.log.maze0_1
+ FAIL
+Points: 4.200000 
