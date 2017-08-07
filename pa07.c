@@ -3,7 +3,7 @@
 #include "maze.h"
 #include "path.h"
 #include "solver.h"
-#include "paths.h"
+//#include "paths.h"
 
 int main(int argc, char ** argv) {
 	if (argc != 3) {
@@ -32,6 +32,6 @@ int main(int argc, char ** argv) {
 		free(m);
 		freePaths(paths);
 	}
-		
+	fclose(fptr);	
 	return EXIT_SUCCESS;
 }

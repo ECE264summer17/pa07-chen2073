@@ -46,4 +46,6 @@ bool containsNode(PathLL * paths, char * path);
 /* Write the paths in the list, in order, one per line, to fptr*/
 void printPaths(PathLL * paths, FILE * fptr);
 
+int checkturns(char * path); //return the number of turns
+
 #endif
